@@ -19,7 +19,8 @@ This was originally designed for the University of Adelaide, but can be used for
 
 ## CSV Format
 
-TITLE, DATE, DAY, DURATION, LOCATION, DESCRIPTION
+Ensure that the below line is at the top of your CSV file, otherwise the script won't run!
+`TITLE, DATE, DAY, DURATION, LOCATION, DESCRIPTION`
 
 For the `DATE` column, the format is:
  - `DD MM`

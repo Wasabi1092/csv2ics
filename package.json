@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "ics": "^3.7.6"
+  }
+}

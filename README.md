@@ -6,7 +6,7 @@ This was originally designed for the University of Adelaide, but can be used for
 
 1. Install the dependencies
 
-`npm install -S ics`
+`npm install -S ics`\n
 `npm install csv-parser`
 
 2. Run `main.js`

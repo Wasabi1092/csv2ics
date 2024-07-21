@@ -104,8 +104,8 @@ fs.createReadStream("./calendar.csv")
             endTime[0][0],
             endTime[0][1],
           ],
-          title: results[i].COURSE,
-          description: results[i].TYPE,
+          title: results[i].TITLE,
+          description: results[i].DESCRIPTION,
           location: results[i].LOCATION,
         };
         currTime = new Date(currTime.getTime() + 7 * 24 * 60 * 60 * 1000);

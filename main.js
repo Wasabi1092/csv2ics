@@ -10,6 +10,9 @@ const event = {
   location: "Folsom Field, University of Colorado (finish line)",
 }; //template for events
 let events = [];
+
+const year = 2025;
+
 const months = [
   "Jan",
   "Feb",
@@ -40,16 +43,8 @@ fs.createReadStream("./calendar.csv")
         end = date[1].split(" ");
         duration =
           Math.ceil(
-            (new Date(
-              new Date().getFullYear(),
-              months.indexOf(end[1]),
-              end[0],
-            ) -
-              new Date(
-                new Date().getFullYear(),
-                months.indexOf(start[1]),
-                start[0],
-              )) /
+            (new Date(year, months.indexOf(end[1]), end[0]) -
+              new Date(year, months.indexOf(start[1]), start[0])) /
               (24 * 60 * 60 * 7 * 1000),
           ) + 1;
       } catch {
@@ -57,6 +52,7 @@ fs.createReadStream("./calendar.csv")
         start = date.split(" ");
         duration = 1;
       }
+
       let startTime;
       let endTime;
       let hours;
@@ -82,7 +78,7 @@ fs.createReadStream("./calendar.csv")
         console.log(`Please check line ${i + 2} for more details.`);
       }
       let currTime = new Date(
-        new Date().getFullYear(),
+        year,
         months.indexOf(start[1]),
         start[0],
         startTime[0][0],
@@ -91,14 +87,14 @@ fs.createReadStream("./calendar.csv")
       for (let j = 0; j < duration; j++) {
         let event = {
           start: [
-            currTime.getFullYear(),
+            year,
             currTime.getMonth() + 1,
             currTime.getDate(),
             startTime[0][0],
             startTime[0][1],
           ],
           end: [
-            currTime.getFullYear(),
+            year,
             currTime.getMonth() + 1,
             currTime.getDate(),
             endTime[0][0],
@@ -109,6 +105,7 @@ fs.createReadStream("./calendar.csv")
           location: results[i].LOCATION,
         };
         currTime = new Date(currTime.getTime() + 7 * 24 * 60 * 60 * 1000);
+
         events.push(event);
       }
     }

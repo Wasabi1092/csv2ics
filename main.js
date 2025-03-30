@@ -1,6 +1,5 @@
 const ics = require("ics");
 const fs = require("fs");
-const csv = require("csv-parser");
 const event = {
   // [yyyy, mm, dd, hh, mm]
   start: [2018, 1, 1, 6, 0],
@@ -31,7 +30,6 @@ let results = [];
 
 function parseItem(item, subject_name, item_name) {
   events = [];
-  console.log(item);
   let start;
   let end;
   let duration;
@@ -49,7 +47,6 @@ function parseItem(item, subject_name, item_name) {
     console.error("CSV not formatted properly. Check all dates and time");
     return;
   }
-
   let startTime;
   let endTime;
   let hours;
@@ -102,27 +99,38 @@ function parseItem(item, subject_name, item_name) {
       location: item[3],
     };
     currTime = new Date(currTime.getTime() + 7 * 24 * 60 * 60 * 1000);
-
     events.push(event);
   }
+  return events;
 }
-return events;
 title = "";
 subject = "";
 //parse the csv file first
 text = fs.readFileSync("calendar.csv", "utf8");
 
 results = text.split("\n");
+console.log;
 for (let i = 0; i < results.length; i++) {
   line = results[i];
-  split_line = line.split(",");
-  if (split_line[1] == "") {
-    if (line.search("-") == -1) {
+  first = line.slice(0, line.indexOf(","));
+  temp = line.slice(line.indexOf(",") + 1);
+  split_line = [];
+  if (temp.indexOf(",") == 0) {
+    if (first.search("-") == -1) {
       title = split_line[0];
     } else {
       subject = split_line[0];
     }
+  } else if (first == "") {
+    break;
   } else {
+    for (let i = 0; i < 3; i++) {
+      split_line.push(line.slice(0, line.indexOf(",")));
+      line = line.slice(line.indexOf(",") + 1);
+    }
+    line.replace('"', "");
+    line.replace("\r", "");
+    split_line.push(line);
     events = events.concat(parseItem(split_line, subject, title));
   }
 }

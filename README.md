@@ -2,37 +2,28 @@
 A script that converts .csv files to .ics files.
 This was originally designed for the University of Adelaide, but can be used for other input sources if formatted correctly.
 
-## Usage
+## Compilation
 
-1. Install the dependencies
+1. Ensure Go is installed
 
-`npm install -S ics`
+You can do this (here)[https://go.dev/doc/install]
 
-`npm install csv-parser`
+2. Download and put the script in the same folder as a file named `calendar.csv`
 
-2. Run `main.js`
+3. Run the script
 
-`node main.js`
+```bash
+cd <directory with script>
+go run main.go
+```
 
-3. Find the `calendar.ics` file, located in the same folder as main.js
-4. Import it to your calendar of choice
+4. A `calendar.ics` should appear in the same folder, which you can import into any calendar.
 
 ## CSV Format
 
-Ensure that the below line is at the top of your CSV file, otherwise the script won't run!
-`TITLE, DATE, DAY, DURATION, LOCATION, DESCRIPTION`
-
-For the `DATE` column, the format is:
- - `DD MM`
-For a single day event
-
-For a recurring event every week:
- - `DD MM - DD MM`
-
-For the `DURATION` column, the format is:
- - `HH:MM AM/PM - HH:MM AM/PM`
-
-An example of a valid row would be
-`Meeting, 24 Jun - 11 Sep, Wednesday, 9:00 AM - 11:00 AM, The Office, Talking about stuff`
-
-The `.csv` file should be be called `calendar.csv`, and should be put into the same folder as the `main.js` file.
+1. If using MyAdelaide, head to the "List List" view of the Timetable Section.
+2. Then expand every subject that you have.
+3. Starting from the first course (including the first course name) click and drag all the way to the bottom of your subjects, such that you have all courses, including their respective names highlighted.
+4. Copy what you highlighted in the last section.
+5. Paste it into a fresh google sheets document
+6. Export as CSV file, rename this to `calendar.csv` and put it in the same directory as the script.

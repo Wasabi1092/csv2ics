@@ -6,7 +6,7 @@ This was originally designed for the University of Adelaide, but can be used for
 
 1. Ensure Go is installed
 
-You can do this (here)[https://go.dev/doc/install]
+You can do this [here](https://go.dev/doc/install)
 
 2. Download and put the script in the same folder as a file named `calendar.csv`
 

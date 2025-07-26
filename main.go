@@ -43,6 +43,26 @@ type Lstruct struct {
 	} `json:"data"`
 }
 
+func NormalizeMonth(dateStr string) string {
+	monthMap := map[string]string{
+		"January":   "Jan",
+		"February":  "Feb",
+		"March":     "Mar",
+		"April":     "Apr",
+		"June":      "Jun",
+		"July":      "Jul",
+		"August":    "Aug",
+		"September": "Sep",
+		"October":   "Oct",
+		"November":  "Nov",
+		"December":  "Dec",
+	}
+	for full, abbr := range monthMap {
+		dateStr = strings.Replace(dateStr, full, abbr, 1)
+	}
+	return dateStr
+}
+
 func TimetableIcal(lessons []smallL, start, end time.Time) error {
 	var err error
 	iCalString := ""
@@ -102,11 +122,13 @@ func FormatLessons(name string) ([]smallL, error) {
 	var lessons []smallL
 	file, err := os.OpenFile(name, os.O_RDWR, 0640)
 	if err != nil {
+		fmt.Println("Failed to open file")
 		return nil, errors.New("File does not exist")
 	}
 	defer file.Close()
 	buf, err := io.ReadAll(file)
 	if err != nil {
+		fmt.Println("Failed to read file")
 		return nil, errors.New("Failed to read file")
 	}
 
@@ -157,17 +179,20 @@ func FormatLessons(name string) ([]smallL, error) {
 	}
 	for _, lesson := range bigLessons {
 		startStr := lesson.StartDate + " " + lesson.StartTime
-		start, err := time.ParseInLocation("02 Jan 2006 3:04 PM", startStr, time.Local)
+		start, err := time.ParseInLocation("02 Jan 2006 3:04 PM", NormalizeMonth(startStr), time.Local)
 		if err != nil {
+			fmt.Println("cannot parse start time: " + startStr)
 			return nil, errors.New("cannot parse time")
 		}
 		endStr := lesson.StartDate + " " + lesson.EndTime
-		end, err := time.ParseInLocation("02 Jan 2006 3:04 PM", endStr, time.Local)
+		end, err := time.ParseInLocation("02 Jan 2006 3:04 PM", NormalizeMonth(endStr), time.Local)
 		if err != nil {
+			fmt.Println("cannot parse end time")
 			return nil, errors.New("cannot parse time")
 		}
-		finalDate, err := time.ParseInLocation("02 Jan 2006", lesson.EndDate, time.Local)
+		finalDate, err := time.ParseInLocation("02 Jan 2006", NormalizeMonth(lesson.EndDate), time.Local)
 		if err != nil {
+			fmt.Println("cannot parse final time")
 			return nil, errors.New("failed to parse date")
 		}
 		numLessons := int(finalDate.UnixMilli()-midnight(start).UnixMilli())/(7*24*60*60*1000) + 1
@@ -196,7 +221,7 @@ func midnight(t time.Time) time.Time {
 func main() {
 	lessons, err := FormatLessons("calendar.csv")
 	if err != nil {
-		errors.New("no calendar")
+		fmt.Println("Failed to parse calendar")
 		return
 	}
 	err = TimetableIcal(lessons, time.Date(time.Now().Year(), 1, 1, 0, 0, 0, 0, time.Local), time.Date(time.Now().Year(), 12, 31, 23, 59, 59, 0, time.Local))
